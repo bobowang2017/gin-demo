@@ -1,0 +1,34 @@
+
+System:
+  log-level: DEBUG
+
+Server:
+  runmode: "debug"
+  httpport: "8080"
+  readtimeout: 60
+  writetimeout: 60
+  logsavepath: "logs/"
+  logmaxage: 7
+  logrotationtime: 1
+  loglevel: "info"
+  enabledswagger: true
+
+Database:
+  type: "mysql"
+  user: "root"
+  password: "root"
+  host: "127.0.0.1:3306"
+  name: "dev_"
+  tableprefix: "t_"
+
+Redis:
+  host: "127.0.0.1:6379"
+  port: 6379
+  password: "xxxxx"
+  maxidle: 100
+  maxactive: 3000
+  idletimeout: 200
+  db: 0
+  connecttimeout: 1000
+  readtimeout: 1000
+  writetimeout: 1000
