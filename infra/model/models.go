@@ -16,8 +16,8 @@ var DB *gorm.DB
 
 type BaseModel struct {
 	ID          int             `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
-	CreatedTime common.JSONTime `gorm:"default:null" json:"createdTime"`
-	UpdatedTime common.JSONTime `gorm:"default:null" json:"updatedTime"`
+	CreatedTime common.JSONTime `gorm:"autoCreateTime" json:"createdTime"`
+	UpdatedTime common.JSONTime `gorm:"autoUpdateTime:milli" json:"updatedTime"`
 }
 
 type TableNameAble interface {
