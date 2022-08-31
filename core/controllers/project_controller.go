@@ -23,6 +23,7 @@ func (p *ProjectController) List(c *gin.Context) {
 	var (
 		queryDto = dto.ProjectListQuery{}
 		result   []*service.ProjectTreeNode
+		total    int64
 		err      error
 	)
 
@@ -30,15 +31,15 @@ func (p *ProjectController) List(c *gin.Context) {
 		log.Logger.Error(err)
 		common.RespInputErrorJSON(c, err.Error())
 	}
-	if queryDto.Page == 0 {
+	if queryDto.Page <= 0 {
 		queryDto.Page = 1
 	}
-	if queryDto.Size == 0 {
+	if queryDto.Size <= 0 {
 		queryDto.Size = 10
 	}
-	if result, err = p.projectService.List(&queryDto); err != nil {
+	if result, total, err = p.projectService.List(&queryDto); err != nil {
 		log.Logger.Error(err)
 		common.RespInputErrorJSON(c, err.Error())
 	}
-	common.RespSuccessJSON(c, result)
+	common.RespSuccessPageJSON(c, result, total)
 }
