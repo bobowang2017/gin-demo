@@ -11,7 +11,7 @@ type ProjectListQuery struct {
 
 // 定义创建项目结构体
 type ProjectCreateDto struct {
-	Name string `binding:"required,min=3,max=10"`
+	Name string `binding:"required,min=3,max=10,not_allow_blank"`
 	Age  int    `binding:"required,gt=0"`
 	Code string `binding:"required,min=3,max=10"`
 }
