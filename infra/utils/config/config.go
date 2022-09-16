@@ -37,3 +37,9 @@ type Redis struct {
 	ReadTimeout    time.Duration
 	WriteTimeout   time.Duration
 }
+
+type AuthCodeJwt struct {
+	Secret string `yaml:"secret"`
+	Issuer string `yaml:"issuer"`
+	Expire int    `yaml:"expire"`
+}
