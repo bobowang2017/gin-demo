@@ -8,10 +8,11 @@ import (
 )
 
 type SettingConfig struct {
-	System   config.System   `yaml:"System"`
-	Server   config.Server   `yaml:"Server"`
-	Database config.Database `yaml:"Database"`
-	Redis    config.Redis    `yaml:"Redis"`
+	System      config.System      `yaml:"System"`
+	Server      config.Server      `yaml:"Server"`
+	Database    config.Database    `yaml:"Database"`
+	Redis       config.Redis       `yaml:"Redis"`
+	AuthCodeJwt config.AuthCodeJwt `yaml:"AuthCodeJwt"`
 }
 
 var Config = &SettingConfig{}

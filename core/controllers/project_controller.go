@@ -17,6 +17,7 @@ func ProjectControllerRegister(router *gin.RouterGroup) {
 		service.NewProjectService(),
 	}
 	router.GET("", projectController.List)
+	router.POST("", projectController.CreateProject)
 }
 
 func (p *ProjectController) List(c *gin.Context) {
@@ -42,4 +43,16 @@ func (p *ProjectController) List(c *gin.Context) {
 		common.RespInputErrorJSON(c, err.Error())
 	}
 	common.RespSuccessPageJSON(c, result, total)
+}
+
+func (p *ProjectController) CreateProject(c *gin.Context) {
+	var (
+		createDto = dto.ProjectCreateDto{}
+		err       error
+	)
+	if err = c.BindJSON(&createDto); err != nil {
+		common.RespInputErrorJSON(c, err.Error())
+		return
+	}
+	common.RespSuccessJSON(c, nil)
 }
