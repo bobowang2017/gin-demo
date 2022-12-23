@@ -4,6 +4,7 @@ import (
 	c "gin-demo/core/controllers"
 	"gin-demo/infra/middlewares"
 	"gin-demo/infra/validators"
+	"github.com/arl/statsviz"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
