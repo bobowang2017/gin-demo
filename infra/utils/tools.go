@@ -110,13 +110,17 @@ func InArrayInt(target int, source []int) bool {
 	return false
 }
 
-type Channel[T int | int64 | float32 | float64 | string] struct {
+type ChanKey interface {
+	int | int8 | int16 | int32 | int64 | float32 | float64 | string
+}
+
+type Channel[T ChanKey] struct {
 	mut    sync.Mutex
 	C      chan T
 	closed bool
 }
 
-func NewChannel[T int | int64 | float32 | float64 | string](size int) *Channel[T] {
+func NewChannel[T ChanKey](size int) *Channel[T] {
 	return &Channel[T]{
 		C:      make(chan T, size),
 		closed: false,
