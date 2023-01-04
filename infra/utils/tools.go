@@ -9,10 +9,11 @@ import (
 	"github.com/pkg/errors"
 	"math/rand"
 	"strconv"
+	"sync"
 	"time"
 )
 
-//读取系统配置文件并解析成SysCfg对象
+// GetSysCfg 读取系统配置文件并解析成SysCfg对象
 func GetSysCfg() (*model.SysCfg, error) {
 	var (
 		content string
@@ -33,7 +34,7 @@ func GetSysCfg() (*model.SysCfg, error) {
 	return &cfg, nil
 }
 
-//删除数组中的重复元素
+// RemoveDuplicatesInt 删除数组中的重复元素
 func RemoveDuplicatesInt(a []int) (ret []int) {
 	length := len(a)
 	for i := 0; i < length; i++ {
@@ -45,7 +46,7 @@ func RemoveDuplicatesInt(a []int) (ret []int) {
 	return ret
 }
 
-//对于协程内部运行的函数，如果发生panic会导致整个程序崩溃，故需要手动recover
+// SafeGo 对于协程内部运行的函数，如果发生panic会导致整个程序崩溃，故需要手动recover
 func SafeGo(do func()) {
 	go func() {
 		defer func() {
@@ -57,7 +58,7 @@ func SafeGo(do func()) {
 	}()
 }
 
-//生成指定范围内的随机数
+// RandomInt 生成指定范围内的随机数
 func RandomInt(min, max int) int {
 	if min >= max || min == 0 || max == 0 {
 		return max
@@ -65,7 +66,7 @@ func RandomInt(min, max int) int {
 	return int(rand.Int63n(int64(max-min))) + min
 }
 
-//时间格式字符串转换成go时间
+// StringToTime 时间格式字符串转换成go时间
 func StringToTime(tmStr string) time.Time {
 	parseTime, _ := time.Parse(common.TimeLayout, tmStr)
 	return parseTime
@@ -76,7 +77,7 @@ func StringToDate(tmStr string) time.Time {
 	return parseTime
 }
 
-//将时间转成格式化字符串
+// TimeToString 将时间转成格式化字符串
 func TimeToString(tmTime time.Time) string {
 	if tmTime.IsZero() {
 		return ""
@@ -84,7 +85,7 @@ func TimeToString(tmTime time.Time) string {
 	return tmTime.Format(common.TimeLayout)
 }
 
-//将时间转成格式化字符串
+// TimeToDateString 将时间转成格式化字符串
 func TimeToDateString(tmTime time.Time) string {
 	if tmTime.IsZero() {
 		return ""
@@ -92,14 +93,14 @@ func TimeToDateString(tmTime time.Time) string {
 	return tmTime.Format(common.DateLayout)
 }
 
-//13位时间戳转时间
+// UnixToTime 13位时间戳转时间
 func UnixToTime(e string) (d time.Time, err error) {
 	data, err := strconv.ParseInt(e, 10, 64)
 	d = time.Unix(data/1000, 0)
 	return
 }
 
-//判断整形元素是否在指定的数组中
+// InArrayInt 判断整形元素是否在指定的数组中
 func InArrayInt(target int, source []int) bool {
 	for _, element := range source {
 		if target == element {
@@ -107,4 +108,33 @@ func InArrayInt(target int, source []int) bool {
 		}
 	}
 	return false
+}
+
+type Channel[T int | int64 | float32 | float64 | string] struct {
+	mut    sync.Mutex
+	C      chan T
+	closed bool
+}
+
+func NewChannel[T int | int64 | float32 | float64 | string](size int) *Channel[T] {
+	return &Channel[T]{
+		C:      make(chan T, size),
+		closed: false,
+		mut:    sync.Mutex{},
+	}
+}
+
+func (c *Channel[T]) Close() {
+	c.mut.Lock()
+	defer c.mut.Unlock()
+	if !c.closed {
+		close(c.C)
+		c.closed = true
+	}
+}
+
+func (c *Channel[T]) IsClosed() bool {
+	c.mut.Lock()
+	defer c.mut.Unlock()
+	return c.closed
 }
