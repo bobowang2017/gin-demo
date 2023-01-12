@@ -4,14 +4,23 @@ import (
 	m "gin-demo/core/model"
 	"gin-demo/infra/dao"
 	"gin-demo/infra/model"
+	"sync"
 )
+
+var (
+	ProjectDaoIns  *ProjectDao
+	ProjectDaoOnce sync.Once
+)
+
+func GetProjectDao() *ProjectDao {
+	ProjectDaoOnce.Do(func() {
+		ProjectDaoIns = &ProjectDao{}
+	})
+	return ProjectDaoIns
+}
 
 type ProjectDao struct {
 	dao.BaseDao
-}
-
-func NewProjectDao() *ProjectDao {
-	return &ProjectDao{}
 }
 
 func (p *ProjectDao) GetRootParentIdByCondition(page, size int, params map[string]interface{}) ([]int, error) {

@@ -153,5 +153,5 @@ func (p *projectService) listWithCondition(page, size int, params map[string]int
 }
 
 func NewProjectService() IProjectService {
-	return &projectService{dao.NewProjectDao()}
+	return &projectService{dao.GetProjectDao()}
 }
