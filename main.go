@@ -5,13 +5,28 @@ import (
 	"gin-demo/core"
 	"gin-demo/infra/common"
 	"gin-demo/infra/utils/log"
+	"github.com/go-playground/locales/en"
+	"github.com/go-playground/locales/zh"
+	ut "github.com/go-playground/universal-translator"
+	"github.com/go-playground/validator/v10"
+	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
 )
 
+func transfer() {
+	common.ValidObj = validator.New()
+	english := en.New()
+	chinese := zh.New()
+	uni := ut.New(chinese, english)
+	common.ValidTrans, _ = uni.GetTranslator("zh")
+	_ = zhTranslations.RegisterDefaultTranslations(common.ValidObj, common.ValidTrans)
+}
+
 func main() {
+	transfer()
 	modulesStr := flag.String("m", "core", "模块启动选项，默认core启动")
 	env := flag.String("e", "local", "配置环境，默认dev，该参数将影响挂载配置文件名")
 	flag.Parse()
