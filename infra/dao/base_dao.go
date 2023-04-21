@@ -22,15 +22,15 @@ func (b *BaseDao) CreateInBatches(model interface{}, batchSize int) error {
 	return err
 }
 
-func (b *BaseDao) GetById(model interface{}, id int) error {
+func (b *BaseDao) GetObjById(model interface{}, id int) error {
 	return m.DB.Model(model).Where(map[string]interface{}{"id": id}).First(model).Error
 }
 
-func (b *BaseDao) GetAll(model interface{}, result interface{}) error {
+func (b *BaseDao) GetAllObj(model interface{}, result interface{}) error {
 	return m.DB.Model(model).Find(result).Error
 }
 
-func (b *BaseDao) GetByCondition(model interface{}, params map[string]interface{}, result interface{}) error {
+func (b *BaseDao) GetObjByCondition(model interface{}, params map[string]interface{}, result interface{}) error {
 	if params == nil {
 		return errors.New("params nil")
 	}
@@ -47,37 +47,21 @@ func (b *BaseDao) GetByCondition(model interface{}, params map[string]interface{
 	return temp.Error
 }
 
-func (b *BaseDao) DeleteById(model interface{}, id int) error {
+func (b *BaseDao) DeleteObjById(model interface{}, id int) error {
 	if err := m.DB.Where(map[string]interface{}{"id": id}).Delete(model).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (b *BaseDao) DeleteByIds(model interface{}, ids *[]int) error {
+func (b *BaseDao) DeleteObjByIds(model interface{}, ids *[]int) error {
 	if err := m.DB.Where("id in ?", *ids).Delete(model).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (b *BaseDao) UpdateById(model interface{}, id int, params map[string]interface{}) error {
-	err := m.DB.Model(model).Where(map[string]interface{}{"id": id}).Updates(params).Error
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (b *BaseDao) UpdateByCondition(model interface{}, params map[string]interface{}, field map[string]interface{}) error {
-	err := m.DB.Model(model).Where(params).Updates(field).Error
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (b *BaseDao) DeleteByCondition(model interface{}, params map[string]interface{}) error {
+func (b *BaseDao) DeleteObjByCondition(model interface{}, params map[string]interface{}) error {
 	err := m.DB.Where(params).Delete(model).Error
 	if err != nil {
 		return err
@@ -85,7 +69,23 @@ func (b *BaseDao) DeleteByCondition(model interface{}, params map[string]interfa
 	return nil
 }
 
-func (b *BaseDao) Total(model interface{}, params map[string]interface{}) (int64, error) {
+func (b *BaseDao) UpdateObjById(model interface{}, id int, params map[string]interface{}) error {
+	err := m.DB.Model(model).Where(map[string]interface{}{"id": id}).Updates(params).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (b *BaseDao) UpdateObjByCondition(model interface{}, params map[string]interface{}, field map[string]interface{}) error {
+	err := m.DB.Model(model).Where(params).Updates(field).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (b *BaseDao) TotalObj(model interface{}, params map[string]interface{}) (int64, error) {
 	var total int64
 	err := m.DB.Model(model).Where(params).Count(&total).Error
 	return total, err

@@ -28,6 +28,8 @@ func (p *ProjectController) List(c *gin.Context) {
 		err      error
 	)
 
+	c.Copy()
+
 	if err = c.BindQuery(&queryDto); err != nil {
 		log.Logger.Error(err)
 		common.RespInputErrorJSON(c, err.Error())

@@ -18,6 +18,6 @@ func (t *TimerDao) GetAll() ([]*m.Task, error) {
 		tasks []*m.Task
 		err   error
 	)
-	err = t.BaseDao.GetByCondition(&m.Task{}, map[string]interface{}{}, &tasks)
+	err = t.BaseDao.GetObjByCondition(&m.Task{}, map[string]interface{}{}, &tasks)
 	return tasks, err
 }

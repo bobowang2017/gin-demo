@@ -23,6 +23,10 @@ type ProjectDao struct {
 	dao.BaseDao
 }
 
+func (p *ProjectDao) GetById(id int) error {
+	return p.GetObjById(&m.Project{}, id)
+}
+
 func (p *ProjectDao) GetRootParentIdByCondition(page, size int, params map[string]interface{}) ([]int, error) {
 	var (
 		ids = make([]int, 0)

@@ -18,7 +18,7 @@ type ITimerService interface {
 	RegisterTimer(taskAddDto *dto.TimerTaskAddDto) error
 }
 
-//关联模块接口实现
+// 关联模块接口实现
 type timerService struct {
 	timerDao *dao.TimerDao
 }
@@ -28,7 +28,7 @@ func (t *timerService) GetById(id int) (*m.Task, error) {
 		result = &m.Task{}
 		err    error
 	)
-	err = t.timerDao.GetById(result, id)
+	err = t.timerDao.GetObjById(result, id)
 	return result, err
 }
 
@@ -37,11 +37,11 @@ func (t *timerService) GetAll() ([]*m.Task, error) {
 }
 
 func (t *timerService) UpdateById(timerId int, params map[string]interface{}) error {
-	return t.timerDao.UpdateById(&m.Task{}, timerId, params)
+	return t.timerDao.UpdateObjById(&m.Task{}, timerId, params)
 }
 
 func (t *timerService) DeleteById(timerId int) error {
-	return t.timerDao.DeleteById(&m.Task{}, timerId)
+	return t.timerDao.DeleteObjById(&m.Task{}, timerId)
 }
 
 func (t *timerService) RegisterTimer(taskAddDto *dto.TimerTaskAddDto) error {

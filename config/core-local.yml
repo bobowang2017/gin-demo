@@ -16,13 +16,13 @@ Server:
 Database:
   type: "mysql"
   user: "root"
-  password: "root"
-  host: "127.0.0.1:3306"
-  name: "study"
+  password: "1q2w3e4r!Q"
+  host: "47.100.220.105:3306"
+  name: "potato"
   tableprefix: "t_"
 
 Redis:
-  host: "127.0.0.1:6379"
+  host: "47.100.220.105:6379"
   port: 6379
   password: "xxxxx"
   maxidle: 100
