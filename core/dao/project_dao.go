@@ -7,27 +7,33 @@ import (
 	"sync"
 )
 
-var (
-	ProjectDaoIns  *ProjectDao
-	ProjectDaoOnce sync.Once
-)
-
-func GetProjectDao() *ProjectDao {
-	ProjectDaoOnce.Do(func() {
-		ProjectDaoIns = &ProjectDao{}
-	})
-	return ProjectDaoIns
+type IProjectDao interface {
+	GetRootParentIdByCondition(page, size int, params map[string]interface{}) ([]int, error)
+	GetDisRootParentIds(page, size int, params map[string]interface{}) ([]int, error)
+	GetTotalDisRootParentId(params map[string]interface{}) (int64, error)
+	GetPathIdsByRootParentIds(rootParentIds []int, params map[string]interface{}) ([]string, error)
+	GetTotalDistinctRootParentId() (int64, error)
+	GetByRootParentIds(rootParentIds []int) ([]*m.Project, error)
+	GetByIds(ids []int64) ([]*m.Project, error)
 }
 
-type ProjectDao struct {
+var (
+	projectDaoIns  *projectDao
+	projectDaoOnce sync.Once
+)
+
+func GetProjectDao() IProjectDao {
+	projectDaoOnce.Do(func() {
+		projectDaoIns = &projectDao{}
+	})
+	return projectDaoIns
+}
+
+type projectDao struct {
 	dao.BaseDao
 }
 
-func (p *ProjectDao) GetById(id int) error {
-	return p.GetObjById(&m.Project{}, id)
-}
-
-func (p *ProjectDao) GetRootParentIdByCondition(page, size int, params map[string]interface{}) ([]int, error) {
+func (p *projectDao) GetRootParentIdByCondition(page, size int, params map[string]interface{}) ([]int, error) {
 	var (
 		ids = make([]int, 0)
 		err error
@@ -37,7 +43,7 @@ func (p *ProjectDao) GetRootParentIdByCondition(page, size int, params map[strin
 	return ids, err
 }
 
-func (p *ProjectDao) GetDisRootParentIds(page, size int, params map[string]interface{}) ([]int, error) {
+func (p *projectDao) GetDisRootParentIds(page, size int, params map[string]interface{}) ([]int, error) {
 	var (
 		ids = make([]int, 0)
 		err error
@@ -59,7 +65,7 @@ func (p *ProjectDao) GetDisRootParentIds(page, size int, params map[string]inter
 	return ids, err
 }
 
-func (p *ProjectDao) GetTotalDisRootParentId(params map[string]interface{}) (int64, error) {
+func (p *projectDao) GetTotalDisRootParentId(params map[string]interface{}) (int64, error) {
 	var (
 		total int64
 		err   error
@@ -80,7 +86,7 @@ func (p *ProjectDao) GetTotalDisRootParentId(params map[string]interface{}) (int
 	return total, err
 }
 
-func (p *ProjectDao) GetPathIdsByRootParentIds(rootParentIds []int, params map[string]interface{}) ([]string, error) {
+func (p *projectDao) GetPathIdsByRootParentIds(rootParentIds []int, params map[string]interface{}) ([]string, error) {
 	var (
 		pathIds = make([]string, 0)
 		err     error
@@ -102,7 +108,7 @@ func (p *ProjectDao) GetPathIdsByRootParentIds(rootParentIds []int, params map[s
 	return pathIds, err
 }
 
-func (p *ProjectDao) GetTotalDistinctRootParentId() (int64, error) {
+func (p *projectDao) GetTotalDistinctRootParentId() (int64, error) {
 	var (
 		total int64
 		err   error
@@ -112,7 +118,7 @@ func (p *ProjectDao) GetTotalDistinctRootParentId() (int64, error) {
 	return total, err
 }
 
-func (p *ProjectDao) GetByRootParentIds(rootParentIds []int) ([]*m.Project, error) {
+func (p *projectDao) GetByRootParentIds(rootParentIds []int) ([]*m.Project, error) {
 	var (
 		rows = make([]*m.Project, 0)
 		err  error
@@ -122,7 +128,7 @@ func (p *ProjectDao) GetByRootParentIds(rootParentIds []int) ([]*m.Project, erro
 	return rows, err
 }
 
-func (p *ProjectDao) GetByIds(ids []int64) ([]*m.Project, error) {
+func (p *projectDao) GetByIds(ids []int64) ([]*m.Project, error) {
 	var (
 		rows = make([]*m.Project, 0)
 		err  error

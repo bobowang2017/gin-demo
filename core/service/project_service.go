@@ -20,7 +20,7 @@ type IProjectService interface {
 }
 
 type projectService struct {
-	projectDao *dao.ProjectDao
+	projectDao dao.IProjectDao
 }
 
 func (p *projectService) List(queryDto *dto.ProjectListQuery) ([]*ProjectTreeNode, int64, error) {
