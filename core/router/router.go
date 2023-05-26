@@ -41,6 +41,11 @@ func InitRouter() *gin.Engine {
 		c.ProjectControllerRegister(projectGroup)
 	}
 
+	socketGroup := router.Group("/api/v1/socket")
+	{
+		c.SocketControllerRegister(socketGroup)
+	}
+
 	router.GET("/api/v1/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status": "200",
