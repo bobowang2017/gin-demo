@@ -40,19 +40,18 @@ func (wm *WsClientManager) Start() {
 	for {
 		select {
 		case client := <-wm.Register:
-			log.Logger.Info("Register +1 :", len(wm.Clients))
 			wm.Clients[client] = true
+			log.Logger.Info("Register +1 :", len(wm.Clients))
 		case client := <-wm.UnRegister:
 			if _, ok := wm.Clients[client]; ok {
-				log.Logger.Info("UnRegister", len(wm.Clients))
 				delete(wm.Clients, client)
+				log.Logger.Info("UnRegister", len(wm.Clients))
 				close(client.Send)
 			}
 		case message := <-wm.Broadcast:
 			for client := range wm.Clients {
 				select {
 				case client.Send <- message:
-
 				default:
 					close(client.Send)
 					delete(wm.Clients, client)

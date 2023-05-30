@@ -21,7 +21,7 @@ var (
 
 type CustomFormatter struct{}
 
-//自定义日志输出格式
+// Format 自定义日志输出格式
 func (s *CustomFormatter) Format(entry *log.Entry) ([]byte, error) {
 	timestamp := time.Now().Local().Format(common.TimeLayout)
 	var file string
@@ -30,8 +30,8 @@ func (s *CustomFormatter) Format(entry *log.Entry) ([]byte, error) {
 		file = filepath.Base(entry.Caller.File)
 		line = entry.Caller.Line
 	}
-	//msg := fmt.Sprintf("%s [%s] [%s:%d] %s\n", timestamp, strings.ToUpper(entry.Level.String()), file, line, entry.Message)
 	msg := fmt.Sprintf("%s [%s] [%s:%d] %s\n", timestamp, strings.ToUpper(entry.Level.String()), file, line, entry.Message)
+	//msg := fmt.Sprintf("%s [%s] [%s:%d] %s\n", timestamp, strings.ToUpper(entry.Level.String()), file, line, entry.Message)
 	return []byte(msg), nil
 }
 
