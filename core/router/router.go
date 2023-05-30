@@ -41,7 +41,7 @@ func InitRouter() *gin.Engine {
 		c.ProjectControllerRegister(projectGroup)
 	}
 
-	socketGroup := router.Group("/api/v1/socket")
+	socketGroup := router.Group("/api/v1/socket/gpt")
 	{
 		c.SocketControllerRegister(socketGroup)
 	}

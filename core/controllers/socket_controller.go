@@ -12,6 +12,7 @@ type SocketController struct {
 func SocketControllerRegister(router *gin.RouterGroup) {
 	socketController := SocketController{}
 	router.GET("ws", socketController.WebSocket)
+	router.GET("broadcast", socketController.Broadcast)
 }
 
 func (s *SocketController) WebSocket(c *gin.Context) {
@@ -23,12 +24,13 @@ func (s *SocketController) WebSocket(c *gin.Context) {
 	defer func() {
 		_ = conn.Close()
 	}()
-	client := &infraSvc.WsClient{
-		Manager:    infraSvc.GetWsClientManager(),
-		SocketConn: conn,
-		Send:       make(chan []byte, 256),
-	}
+	client := infraSvc.GetWsClient(infraSvc.WithConnOpt(conn))
 	client.Manager.Register <- client
-	go client.Read()
 	go client.Write()
+	client.Read()
+}
+
+func (s *SocketController) Broadcast(c *gin.Context) {
+	infraSvc.GetWsClientManager().Broadcast <- []byte("broadcast")
+	common.RespSuccessJSON(c, nil)
 }
