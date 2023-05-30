@@ -5,7 +5,6 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/websocket"
 	"github.com/robfig/cron/v3"
-	"net/http"
 )
 
 var (
@@ -14,10 +13,9 @@ var (
 	// ValidTrans 定义错误翻译对象
 	ValidTrans ut.Translator
 	ValidObj   *validator.Validate
-	// SocketUpGrader 定义websocket对象
-	SocketUpGrader = websocket.Upgrader{
-		CheckOrigin: func(r *http.Request) bool {
-			return true
-		},
-	}
 )
+
+var WsUpGrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+}
