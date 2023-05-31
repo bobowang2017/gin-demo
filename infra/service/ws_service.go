@@ -92,20 +92,19 @@ func GetWsClient(opts ...NewWsClientOpt) *WsClient {
 
 // Read 读取客户端发送过来的消息
 func (ws *WsClient) Read() {
-	var ticker *time.Ticker
 	// 出现故障后把当前客户端注销
 	defer func() {
 		_ = ws.SocketConn.Close()
 		ws.Manager.UnRegister <- ws
 	}()
-	defer ticker.Stop()
 	ws.SocketConn.SetReadLimit(common.MaxMessageSize)
 	_ = ws.SocketConn.SetReadDeadline(time.Now().Add(common.PongWait))
 	ws.SocketConn.SetPongHandler(func(string) error {
 		_ = ws.SocketConn.SetReadDeadline(time.Now().Add(common.PongWait))
 		return nil
 	})
-	ticker = time.NewTicker(3 * time.Second)
+	ticker := time.NewTicker(3 * time.Second)
+	defer ticker.Stop()
 	for {
 		_, data, err := ws.SocketConn.ReadMessage()
 		if err != nil {
