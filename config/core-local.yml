@@ -32,3 +32,12 @@ Redis:
   connecttimeout: 1000
   readtimeout: 1000
   writetimeout: 1000
+
+QiNiuYun:
+  host: "http://rmctfv4vl.hn-bkt.clouddn.com"
+  accessKey: "sJthUYIBW5Qgu2qALY-QXOKcno35cEcaapyUQYsj"
+  secretKey: "Fwoyjq0BMQJY4a9pVvK4ayGifNSOyWoXTM-pXdu6"
+  topicBucket: "test"
+  commentBucket: ""
+  replyBucket: ""
+  defaultExpire: 7200

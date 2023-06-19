@@ -43,3 +43,13 @@ type AuthCodeJwt struct {
 	Issuer string `yaml:"issuer"`
 	Expire int    `yaml:"expire"`
 }
+
+type QiNiuYun struct {
+	Host          string `yaml:"host"`
+	AccessKey     string `yaml:"accessKey"`
+	SecretKey     string `yaml:"secretKey"`
+	TopicBucket   string `yaml:"topicBucket"`
+	CommentBucket string `yaml:"commentBucket"`
+	ReplyBucket   string `yaml:"replyBucket"`
+	DefaultExpire uint64 `yaml:"defaultExpire"`
+}

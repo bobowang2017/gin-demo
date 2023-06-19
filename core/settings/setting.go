@@ -13,6 +13,7 @@ type SettingConfig struct {
 	Database    config.Database    `yaml:"Database"`
 	Redis       config.Redis       `yaml:"Redis"`
 	AuthCodeJwt config.AuthCodeJwt `yaml:"AuthCodeJwt"`
+	QiNiuYun    config.QiNiuYun    `yaml:"QiNiuYun"`
 }
 
 var Config = &SettingConfig{}
