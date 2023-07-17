@@ -41,3 +41,8 @@ QiNiuYun:
   commentBucket: ""
   replyBucket: ""
   defaultExpire: 7200
+
+AuthCodeJwt:
+  secret: "7MxYgO1I07XacrGLTeXDPj7rS6uABsInoQlQ3EDBU0Rff6K6ZALt9fbarKh4m5BOSFTZ"
+  issuer: "demo"
+  expire: 7200
