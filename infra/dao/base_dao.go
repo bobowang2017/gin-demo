@@ -47,6 +47,27 @@ func (b *BaseDao) GetObjByCondition(model interface{}, params map[string]interfa
 	return temp.Error
 }
 
+func (b *BaseDao) GetByLikeCondition(model interface{}, params, likeParams map[string]interface{}, result interface{}) error {
+	if params == nil {
+		return errors.New("params nil")
+	}
+	temp := m.DB.Model(model)
+	page, okPage := params["page"].(int)
+	size, okSize := params["size"].(int)
+	if okPage && okSize {
+		delete(params, "page")
+		delete(params, "size")
+		temp = temp.Offset((page - 1) * size).Limit(size).Where(params)
+	} else {
+		temp = temp.Where(params)
+	}
+	for k, v := range likeParams {
+		temp = temp.Where(k+" like ?", "%"+v.(string)+"%")
+	}
+	temp = temp.Find(result)
+	return temp.Error
+}
+
 func (b *BaseDao) GetOneByCondition(model interface{}, params map[string]interface{}) (err error) {
 	if params == nil {
 		return errors.New("params nil")
