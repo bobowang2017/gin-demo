@@ -34,8 +34,12 @@ func GetSysCfg() (*model.SysCfg, error) {
 	return &cfg, nil
 }
 
-// RemoveDuplicatesInt 删除数组中的重复元素
-func RemoveDuplicatesInt(a []int) (ret []int) {
+type RepeatKey interface {
+	int | int8 | int16 | int32 | int64 | float32 | float64 | string
+}
+
+// RemoveDuplicates 删除排序数组中的重复元素
+func RemoveDuplicates[T RepeatKey](a []T) (ret []T) {
 	length := len(a)
 	for i := 0; i < length; i++ {
 		if i > 0 && a[i-1] == a[i] {
@@ -100,8 +104,8 @@ func UnixToTime(e string) (d time.Time, err error) {
 	return
 }
 
-// InArrayInt 判断整形元素是否在指定的数组中
-func InArrayInt(target int, source []int) bool {
+// InArray 判断整形元素是否在指定的数组中
+func InArray[T RepeatKey](target T, source []T) bool {
 	for _, element := range source {
 		if target == element {
 			return true
