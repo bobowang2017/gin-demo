@@ -10,6 +10,7 @@ import (
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 	"log"
+	"time"
 )
 
 var DB *gorm.DB
@@ -56,4 +57,6 @@ func Setup() {
 	}
 	sqlDB.SetMaxIdleConns(10)
 	sqlDB.SetMaxOpenConns(100)
+	// 数据库连接最大生存时间(默认是8小时,也就是说如果8小时内没有任何数据库操作的话,数据库就会关闭连接,当前线上设置的是1800秒)
+	sqlDB.SetConnMaxLifetime(time.Second * 1700)
 }
