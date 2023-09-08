@@ -21,3 +21,7 @@ const (
 	// MaxMessageSize Maximum message size allowed from peer.
 	MaxMessageSize = 512
 )
+
+const (
+	SysCfgRedisKey = "system-config"
+)

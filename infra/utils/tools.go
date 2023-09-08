@@ -6,6 +6,7 @@ import (
 	"gin-demo/infra/dao"
 	"gin-demo/infra/model"
 	"gin-demo/infra/utils/log"
+	"gin-demo/infra/utils/redis"
 	"github.com/pkg/errors"
 	"math/rand"
 	"strconv"
@@ -16,18 +17,32 @@ import (
 // GetSysCfg 读取系统配置文件并解析成SysCfg对象
 func GetSysCfg() (*model.SysCfg, error) {
 	var (
-		content string
-		cfg     = model.SysCfg{}
-		err     error
+		content  string
+		redisKey = common.SysCfgRedisKey
+		expired  = 600
+		cfg      = model.SysCfg{}
+		err      error
 	)
-
-	sysCfg, err := dao.NewSystemConfigDao().GetUsingCfg()
-	if err != nil {
-		log.Logger.Error(err.Error())
-		return nil, errors.New(common.GetSysCfgError)
+	if content, err = redis.Get(redisKey); err != nil {
+		log.Logger.Error(common.RedisServerError)
 	}
-	content = sysCfg.Content
-	if err := json.Unmarshal([]byte(content), &cfg); err != nil {
+
+	if content == "" {
+		sysCfg, err := dao.NewSystemConfigDao().GetUsingCfg()
+		if err != nil {
+			log.Logger.Error(err.Error())
+			return nil, errors.New(common.GetSysCfgError)
+		}
+		content = sysCfg.Content
+		if err := json.Unmarshal([]byte(content), &cfg); err != nil {
+			log.Logger.Error(err.Error())
+			return nil, errors.New(common.ParseSysCfgError)
+		}
+		_ = redis.Set(redisKey, &cfg, expired)
+		return &cfg, nil
+	}
+
+	if err = json.Unmarshal([]byte(content), &cfg); err != nil {
 		log.Logger.Error(err.Error())
 		return nil, errors.New(common.ParseSysCfgError)
 	}
