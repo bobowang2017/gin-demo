@@ -35,6 +35,17 @@ func closeCon(con redis.Conn) {
 	_ = con.Close()
 }
 
+func Exists(key string) bool {
+	conn := pool.Get()
+	defer closeCon(conn)
+	exist, err := redis.Bool(conn.Do("EXISTS", key))
+	if err != nil {
+		log.Logger.Error(err.Error(), "| Redis EXIST Error")
+		return false
+	}
+	return exist
+}
+
 func Set(key string, data interface{}, time int) error {
 	/**
 	Redis String set操作
@@ -368,6 +379,86 @@ func SIsMember(key, val string) (bool, error) {
 	if err != nil {
 		log.Logger.Error(err.Error(), "| Redis SISMEMBER Error")
 		return false, err
+	}
+	return res, nil
+}
+
+func SMembers(key string) ([]string, error) {
+	/**
+	Redis SMembers
+	*/
+	conn := pool.Get()
+	defer closeCon(conn)
+	res, err := redis.Values(conn.Do("SMEMBERS", key))
+	if err != nil {
+		log.Logger.Error(err.Error(), "| Redis SMEMBERS Error")
+		return nil, err
+	}
+	rows := make([]string, 0)
+	for _, v := range res {
+		rows = append(rows, string(v.([]byte)))
+	}
+	return rows, nil
+}
+
+func ZAdd(key string, data map[string]float64) error {
+	conn := pool.Get()
+	defer closeCon(conn)
+	if data == nil {
+		return nil
+	}
+	params := []interface{}{key}
+	for k, v := range data {
+		params = append(params, v, k)
+	}
+	_, err := conn.Do("ZADD", params...)
+	if err != nil {
+		log.Logger.Error(err.Error(), "| Redis ZAdd Error")
+		return err
+	}
+	return nil
+}
+
+func ZRem(key string, members ...interface{}) error {
+	conn := pool.Get()
+	defer closeCon(conn)
+	_, err := conn.Do("ZREM", members...)
+	if err != nil {
+		log.Logger.Error(err.Error(), "| Redis ZREM Error")
+		return err
+	}
+	return nil
+}
+
+func ZRevRange(key string, start, end int) ([]string, error) {
+	conn := pool.Get()
+	defer closeCon(conn)
+	rows, err := redis.Strings(conn.Do("ZREVRANGE", key, start, end))
+	if err != nil {
+		log.Logger.Error(err.Error(), "| Redis ZREVRANGE Error")
+		return rows, err
+	}
+	return rows, nil
+}
+
+func ZRange(key string, start, end int) ([]string, error) {
+	conn := pool.Get()
+	defer closeCon(conn)
+	rows, err := redis.Strings(conn.Do("ZRange", key, start, end))
+	if err != nil {
+		log.Logger.Error(err.Error(), "| Redis ZRange Error")
+		return rows, err
+	}
+	return rows, nil
+}
+
+func ZCard(key string) (int64, error) {
+	conn := pool.Get()
+	defer closeCon(conn)
+	res, err := redis.Int64(conn.Do("ZCard", key))
+	if err != nil {
+		log.Logger.Error(err.Error(), "| Redis ZCard Error")
+		return res, err
 	}
 	return res, nil
 }
