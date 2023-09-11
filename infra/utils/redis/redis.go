@@ -358,7 +358,7 @@ func SRem(key string, val ...interface{}) error {
 	conn := pool.Get()
 	defer closeCon(conn)
 	args := []interface{}{key}
-	for v := range val {
+	for _, v := range val {
 		args = append(args, v)
 	}
 	_, err := redis.Int64(conn.Do("SREM", args...))
