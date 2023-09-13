@@ -7,7 +7,6 @@ import (
 	"gin-demo/infra/model"
 	"gin-demo/infra/utils/log"
 	"gin-demo/infra/utils/redis"
-	"github.com/pkg/errors"
 	"math/rand"
 	"strconv"
 	"sync"
@@ -15,7 +14,7 @@ import (
 )
 
 // GetSysCfg 读取系统配置文件并解析成SysCfg对象
-func GetSysCfg() (*model.SysCfg, error) {
+func GetSysCfg() *model.SysCfg {
 	var (
 		content  string
 		redisKey = common.SysCfgRedisKey
@@ -31,22 +30,22 @@ func GetSysCfg() (*model.SysCfg, error) {
 		sysCfg, err := dao.NewSystemConfigDao().GetUsingCfg()
 		if err != nil {
 			log.Logger.Error(err.Error())
-			return nil, errors.New(common.GetSysCfgError)
+			panic(common.GetSysCfgError)
 		}
 		content = sysCfg.Content
 		if err := json.Unmarshal([]byte(content), &cfg); err != nil {
 			log.Logger.Error(err.Error())
-			return nil, errors.New(common.ParseSysCfgError)
+			panic(common.ParseSysCfgError)
 		}
 		_ = redis.Set(redisKey, &cfg, expired)
-		return &cfg, nil
+		return &cfg
 	}
 
 	if err = json.Unmarshal([]byte(content), &cfg); err != nil {
 		log.Logger.Error(err.Error())
-		return nil, errors.New(common.ParseSysCfgError)
+		panic(common.ParseSysCfgError)
 	}
-	return &cfg, nil
+	return &cfg
 }
 
 type RepeatKey interface {
