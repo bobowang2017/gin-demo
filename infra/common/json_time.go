@@ -18,6 +18,9 @@ func (t JSONTime) MarshalJSON() ([]byte, error) {
 }
 
 func (t *JSONTime) UnmarshalJSON(data []byte) error {
+	if string(data) == "null" {
+		return nil
+	}
 	if len(data) < 2 || data[0] != '"' || data[len(data)-1] != '"' {
 		return errors.New("Time.UnmarshalJSON: input is not a JSON string")
 	}
