@@ -2,13 +2,18 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
+	m "gin-demo/core/model"
 	"gin-demo/infra/common"
 	"gin-demo/infra/dao"
 	"gin-demo/infra/model"
 	"gin-demo/infra/utils/log"
 	"gin-demo/infra/utils/redis"
+	"github.com/gin-gonic/gin"
 	"math/rand"
+	"net"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 )
@@ -18,7 +23,7 @@ func GetSysCfg() *model.SysCfg {
 	var (
 		content  string
 		redisKey = common.SysCfgRedisKey
-		expired  = 600
+		expired  = 3600
 		cfg      = model.SysCfg{}
 		err      error
 	)
@@ -46,6 +51,41 @@ func GetSysCfg() *model.SysCfg {
 		panic(common.ParseSysCfgError)
 	}
 	return &cfg
+}
+
+func GetClientIp(c *gin.Context) (string, error) {
+	ip := c.Request.Header.Get("X-REAL-IP")
+	netIP := net.ParseIP(ip)
+	if netIP != nil {
+		return ip, nil
+	}
+	//从请求头部的X-FORWARDED-FOR获取Ip
+	ips := c.Request.Header.Get("X-FORWARDED-FOR")
+	splitIps := strings.Split(ips, ",")
+	for _, ip := range splitIps {
+		netIP := net.ParseIP(ip)
+		if netIP != nil {
+			return ip, nil
+		}
+	}
+	//从请求头部的RemoteAddr获取Ip
+	ip, _, err := net.SplitHostPort(c.Request.RemoteAddr)
+	if err != nil {
+		return "", err
+	}
+	netIP = net.ParseIP(ip)
+	if netIP != nil {
+		return ip, nil
+	}
+	return "", fmt.Errorf("正确ip获取失败")
+}
+
+func MustGetUserId(c *gin.Context) string {
+	return c.MustGet("userInfo").(*m.User).UserId
+}
+
+func MustGetUser(c *gin.Context) *m.User {
+	return c.MustGet("userInfo").(*m.User)
 }
 
 type RepeatKey interface {

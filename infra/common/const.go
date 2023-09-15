@@ -23,5 +23,6 @@ const (
 )
 
 const (
-	SysCfgRedisKey = "system-config"
+	SysCfgRedisKey  = "system-config"
+	UserLatestLogin = "user:latest:login"
 )

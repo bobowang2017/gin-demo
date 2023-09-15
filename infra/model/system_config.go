@@ -8,7 +8,11 @@ type SystemConfig struct {
 	IsUsing *int   `gorm:"not null;" json:"isUsing"`
 }
 
-//定义系统配置Content结构对象
+// SysCfg 定义系统配置Content结构对象
 type SysCfg struct {
-
+	ValidCodeExpire int
+	UserExpire      int
+	NoAuthUrl       map[string]string
+	TokenExpire     int
+	UserLabelExpire int
 }

@@ -7,16 +7,13 @@ import (
 	"time"
 )
 
-// 自定义JWT额外字段信息
+// AuthCodeInfo 自定义JWT额外字段信息
 type AuthCodeInfo struct {
-	UserName       string `json:"username"`
-	Department     string `json:"department"`
-	ProjectName    string `json:"projectName"`
-	ProjectCode    string `json:"projectCode"`
-	ProjectJiraKey string `json:"projectJiraKey"`
+	UserId   string `json:"userId"`
+	UserName string `json:"username"`
 }
 
-//自定义AuthCode JWT信息
+// AuthCodeJwtClaims 自定义AuthCode JWT信息
 type AuthCodeJwtClaims struct {
 	jwt.RegisteredClaims
 	AuthCodeInfo
@@ -24,7 +21,7 @@ type AuthCodeJwtClaims struct {
 
 var secret = settings.Config.AuthCodeJwt.Secret
 
-// 生成JWT
+// GenerateToken 生成JWT
 func GenerateToken(authCodeInfo AuthCodeInfo, expire time.Duration) (string, error) {
 	var (
 		issuer = settings.Config.AuthCodeJwt.Issuer
