@@ -1,8 +1,9 @@
-package router
+package core
 
 import (
 	c "gin-demo/core/controllers"
-	"gin-demo/infra/middlewares"
+	"gin-demo/core/middlewares"
+	infraMw "gin-demo/infra/middlewares"
 	"gin-demo/infra/validators"
 	"github.com/arl/statsviz"
 	"github.com/gin-gonic/gin"
@@ -30,7 +31,7 @@ func InitRouter() *gin.Engine {
 	})
 
 	// 要在路由组之前全局使用「跨域中间件」, 否则OPTIONS会返回404
-	router.Use(middlewares.Cors(), middlewares.Auth(), middlewares.Recover)
+	router.Use(infraMw.Cors(), middlewares.Auth(), infraMw.Recover)
 	timerGroup := router.Group("/api/v1/timers")
 	{
 		c.TimerRouterRegister(timerGroup)
