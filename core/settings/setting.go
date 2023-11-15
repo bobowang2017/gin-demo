@@ -14,6 +14,7 @@ type SettingConfig struct {
 	Redis       config.Redis       `yaml:"Redis"`
 	AuthCodeJwt config.AuthCodeJwt `yaml:"AuthCodeJwt"`
 	QiNiuYun    config.QiNiuYun    `yaml:"QiNiuYun"`
+	RabbitMq    config.RabbitMq    `yaml:"RabbitMq"`
 }
 
 var Config = &SettingConfig{}

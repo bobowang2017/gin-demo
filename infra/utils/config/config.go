@@ -1,6 +1,8 @@
 package config
 
-import "time"
+import (
+	"time"
+)
 
 type System struct {
 	LogLevel string `yaml:"log-level"`
@@ -52,4 +54,11 @@ type QiNiuYun struct {
 	CommentBucket string `yaml:"commentBucket"`
 	ReplyBucket   string `yaml:"replyBucket"`
 	DefaultExpire uint64 `yaml:"defaultExpire"`
+}
+
+type RabbitMq struct {
+	Host       string `yaml:"host"`
+	Exchange   string `yaml:"exchange"`
+	RoutingKey string `yaml:"routingKey"`
+	Queue      string `yaml:"queue"`
 }
