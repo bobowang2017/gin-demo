@@ -4,6 +4,7 @@ import "time"
 
 const (
 	ModuleCore = "core"
+	ModuleMQ   = "mq"
 )
 
 const (

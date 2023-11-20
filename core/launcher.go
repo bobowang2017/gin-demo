@@ -5,6 +5,7 @@ import (
 	"gin-demo/infra/model"
 	infraSvc "gin-demo/infra/service"
 	"gin-demo/infra/utils/log"
+	"gin-demo/infra/utils/mq"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,4 +25,9 @@ func Start() {
 	if err := routers.Run("0.0.0.0:" + settings.Config.Server.HttpPort); err != nil {
 		log.Logger.Fatalf("服务启动失败: %v", err)
 	}
+}
+
+func StartConsumer() {
+	setUp()
+	mq.StartConsumer(nil)
 }

@@ -47,6 +47,8 @@ func main() {
 		switch strings.Trim(module, " ") {
 		case common.ModuleCore:
 			go core.Start()
+		case common.ModuleMQ:
+			go core.StartConsumer()
 		}
 	}
 
