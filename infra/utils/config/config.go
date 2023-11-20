@@ -62,3 +62,10 @@ type RabbitMq struct {
 	RoutingKey string `yaml:"routingKey"`
 	Queue      string `yaml:"queue"`
 }
+
+type MqConsumer struct {
+	Host       string `yaml:"host"`
+	Exchange   string `yaml:"exchange"`
+	RoutingKey string `yaml:"routingKey"`
+	Queue      string `yaml:"queue"`
+}

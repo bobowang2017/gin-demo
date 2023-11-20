@@ -2,6 +2,7 @@ package mq
 
 import (
 	"context"
+	"gin-demo/infra/utils/config"
 	"github.com/wagslane/go-rabbitmq"
 	"os"
 	"os/signal"
@@ -58,9 +59,9 @@ func NewRabbitMqClient() *RabbitMqClient {
 	return rabbitMqClient
 }
 
-func StartConsumer(handler rabbitmq.Handler) {
+func StartConsumer(cfg *config.MqConsumer, handler rabbitmq.Handler) {
 	conn, err := rabbitmq.NewConn(
-		"amqp://guest:guest@localhost",
+		cfg.Host,
 		rabbitmq.WithConnectionOptionsLogging,
 	)
 	if err != nil {
@@ -76,9 +77,9 @@ func StartConsumer(handler rabbitmq.Handler) {
 		//	// rabbitmq.Ack, rabbitmq.NackDiscard, rabbitmq.NackRequeue
 		//	return rabbitmq.Ack
 		//},
-		"my_queue",
-		rabbitmq.WithConsumerOptionsRoutingKey("my_routing_key"),
-		rabbitmq.WithConsumerOptionsExchangeName("events"),
+		cfg.Queue,
+		rabbitmq.WithConsumerOptionsRoutingKey(cfg.RoutingKey),
+		rabbitmq.WithConsumerOptionsExchangeName(cfg.Exchange),
 		rabbitmq.WithConsumerOptionsExchangeDeclare,
 	)
 	if err != nil {

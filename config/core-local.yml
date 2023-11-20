@@ -52,3 +52,9 @@ RabbitMq:
   exchange: "exchange"
   routingKey: "key"
   queue: "hello"
+
+MqConsumer:
+  host: "amqp://guest:guest@localhost"
+  exchange: "exchange"
+  routingKey: "key"
+  queue: "hello"
