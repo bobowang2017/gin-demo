@@ -3,6 +3,7 @@ package mq
 import (
 	"context"
 	"gin-demo/infra/utils/config"
+	"gin-demo/infra/utils/log"
 	"github.com/wagslane/go-rabbitmq"
 	"os"
 	"os/signal"
@@ -60,6 +61,11 @@ func NewRabbitMqClient() *RabbitMqClient {
 }
 
 func StartConsumer(cfg *config.MqConsumer, handler rabbitmq.Handler) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Logger.Error(err)
+		}
+	}()
 	conn, err := rabbitmq.NewConn(
 		cfg.Host,
 		rabbitmq.WithConnectionOptionsLogging,
@@ -71,12 +77,12 @@ func StartConsumer(cfg *config.MqConsumer, handler rabbitmq.Handler) {
 
 	consumer, err := rabbitmq.NewConsumer(
 		conn,
-		handler,
-		//func(d rabbitmq.Delivery) rabbitmq.Action {
-		//	log.Logger.Infof("consumed: %v", string(d.Body))
-		//	// rabbitmq.Ack, rabbitmq.NackDiscard, rabbitmq.NackRequeue
-		//	return rabbitmq.Ack
-		//},
+		//handler,
+		func(d rabbitmq.Delivery) rabbitmq.Action {
+			log.Logger.Infof("consumed: %v", string(d.Body))
+			// rabbitmq.Ack, rabbitmq.NackDiscard, rabbitmq.NackRequeue
+			return rabbitmq.Ack
+		},
 		cfg.Queue,
 		rabbitmq.WithConsumerOptionsRoutingKey(cfg.RoutingKey),
 		rabbitmq.WithConsumerOptionsExchangeName(cfg.Exchange),

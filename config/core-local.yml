@@ -54,7 +54,7 @@ RabbitMq:
   queue: "hello"
 
 MqConsumer:
-  host: "amqp://guest:guest@localhost"
+  host: "amqp://wangxiangbo:1q2w3e4r!Q@47.100.220.105:5672"
   exchange: "exchange"
   routingKey: "key"
   queue: "hello"
