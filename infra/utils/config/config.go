@@ -27,6 +27,9 @@ type Database struct {
 	Host        string
 	Name        string
 	TablePrefix string
+	MaxIdleCon  int
+	MaxOpenCon  int
+	MaxIdleTime int64
 }
 
 type Redis struct {

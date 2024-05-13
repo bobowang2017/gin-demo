@@ -20,6 +20,9 @@ Database:
   host: "47.100.220.105:3306"
   name: "potato"
   tableprefix: "t_"
+  maxidlecon: 10
+  maxopencon: 100
+  maxidletime: 1700
 
 Redis:
   host: "47.100.220.105:6379"
