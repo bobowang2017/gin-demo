@@ -66,4 +66,6 @@ func Setup() {
 	sqlDB.SetMaxOpenConns(settings.Config.Database.MaxOpenCon)
 	// 数据库连接最大生存时间(默认是8小时,也就是说如果8小时内没有任何数据库操作的话,数据库就会关闭连接,当前线上设置的是1800秒)
 	sqlDB.SetConnMaxIdleTime(time.Duration(settings.Config.Database.MaxIdleTime) * time.Second)
+	// 设置数据库连接池连接保持时间为5分钟，如果5分钟没有新的请求，client会关闭连接。如果5分钟内有新的请求，则服务端连接时间会重置为0。连接关闭后，连接池中没有可用连接，后续新的请求会重新创建数据库连接放到连接池中
+	sqlDB.SetConnMaxLifetime(5 * 60 * time.Second)
 }
