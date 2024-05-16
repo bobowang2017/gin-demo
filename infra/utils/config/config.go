@@ -30,6 +30,7 @@ type Database struct {
 	MaxIdleCon  int
 	MaxOpenCon  int
 	MaxIdleTime int64
+	MaxLifeTime int64
 }
 
 type Redis struct {

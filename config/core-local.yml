@@ -23,6 +23,7 @@ Database:
   maxidlecon: 10
   maxopencon: 100
   maxidletime: 1700
+  maxlifetime: 300
 
 Redis:
   host: "47.100.220.105:6379"
