@@ -19,8 +19,6 @@ type AuthCodeJwtClaims struct {
 	AuthCodeInfo
 }
 
-var secret = settings.Config.AuthCodeJwt.Secret
-
 // GenerateToken 生成JWT
 func GenerateToken(authCodeInfo AuthCodeInfo, expire time.Duration) (string, error) {
 	var (
@@ -38,13 +36,13 @@ func GenerateToken(authCodeInfo AuthCodeInfo, expire time.Duration) (string, err
 		AuthCodeInfo: authCodeInfo,
 	}
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	token, err = tokenClaims.SignedString([]byte(secret))
+	token, err = tokenClaims.SignedString([]byte(settings.Config.AuthCodeJwt.Secret))
 	return token, err
 }
 
 func Secret() jwt.Keyfunc {
 	return func(token *jwt.Token) (interface{}, error) {
-		return []byte(secret), nil // 这是我的secret
+		return []byte(settings.Config.AuthCodeJwt.Secret), nil // 这是我的secret
 	}
 }
 

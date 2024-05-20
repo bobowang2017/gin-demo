@@ -8,14 +8,14 @@ import (
 )
 
 type SettingConfig struct {
-	System      config.System      `yaml:"System"`
-	Server      config.Server      `yaml:"Server"`
-	Database    config.Database    `yaml:"Database"`
-	Redis       config.Redis       `yaml:"Redis"`
-	AuthCodeJwt config.AuthCodeJwt `yaml:"AuthCodeJwt"`
-	QiNiuYun    config.QiNiuYun    `yaml:"QiNiuYun"`
-	RabbitMq    config.RabbitMq    `yaml:"RabbitMq"`
-	MqConsumer  config.MqConsumer  `yaml:"MqConsumer"`
+	System      *config.System      `yaml:"System"`
+	Server      *config.Server      `yaml:"Server"`
+	Database    *config.Database    `yaml:"Database"`
+	Redis       *config.Redis       `yaml:"Redis"`
+	AuthCodeJwt *config.AuthCodeJwt `yaml:"AuthCodeJwt"`
+	QiNiuYun    *config.QiNiuYun    `yaml:"QiNiuYun"`
+	RabbitMq    *config.RabbitMq    `yaml:"RabbitMq"`
+	MqConsumer  *config.MqConsumer  `yaml:"MqConsumer"`
 }
 
 var Config = &SettingConfig{}

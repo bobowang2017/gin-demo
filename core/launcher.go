@@ -29,5 +29,5 @@ func Start() {
 
 func StartConsumer() {
 	setUp()
-	mq.StartConsumer(&settings.Config.MqConsumer, nil)
+	mq.StartConsumer(settings.Config.MqConsumer, nil)
 }
